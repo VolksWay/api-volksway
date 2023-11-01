@@ -22,6 +22,9 @@ public class UsuarioModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_usuario", nullable = false)
     private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
     private UUID id_empresa;
     private String nome;
     private String telefone;

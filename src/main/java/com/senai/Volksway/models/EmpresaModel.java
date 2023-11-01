@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.io.Serial;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ public class EmpresaModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_empresa", nullable = false)
+    private UUID id;
     private String razao_social;
     private String cidade;
     private String cnpj;

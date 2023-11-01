@@ -1,7 +1,6 @@
 package com.senai.Volksway.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,18 +20,23 @@ public class PropagandaModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_propaganda", nullable = false)
-    @NotBlank UUID id_usuario;
-    @NotBlank String titulo;
+    private UUID id;
 
-    @NotBlank String url;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UUID id_usuario;
 
-    @NotBlank String descricao;
+    private String titulo;
 
-    @NotBlank Date img;
-    @NotBlank String publico_alvo;
-    @NotBlank Date data_limite;
+    private String url;
 
-    @NotBlank float preco;
-    @NotBlank boolean importancia;
-    @NotBlank String nomeTipoPropaganda;
+    private String descricao;
+
+    private Date img;
+    private String publico_alvo;
+    private Date data_limite;
+
+    private float preco;
+    private boolean importancia;
+    private String nomeTipoPropaganda;
 }

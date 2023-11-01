@@ -19,6 +19,10 @@ public class ChecklistModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_checklist", nullable = false)
+    private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_veiculo", referencedColumnName = "id_veiculo")
     private UUID id_veiculo;
     private boolean freio;
 

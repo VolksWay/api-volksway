@@ -20,7 +20,11 @@ public class VeiculoModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_veiculo", nullable = false)
+    private UUID id;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UUID id_usuario;
+
     private String marca;
 
     private String placa;
