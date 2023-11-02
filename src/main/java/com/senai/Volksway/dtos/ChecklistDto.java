@@ -1,5 +1,6 @@
 package com.senai.Volksway.dtos;
 
+import com.senai.Volksway.models.VeiculoModel;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 

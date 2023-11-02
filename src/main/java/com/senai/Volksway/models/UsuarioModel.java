@@ -25,7 +25,8 @@ public class UsuarioModel implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
-    private UUID id_empresa;
+    private EmpresaModel empresa;
+
     private String nome;
     private String telefone;
     private String email;

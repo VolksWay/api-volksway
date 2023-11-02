@@ -24,7 +24,7 @@ public class PropagandaModel implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
-    private UUID id_usuario;
+    private UsuarioModel usuario;
 
     private String titulo;
 
@@ -32,7 +32,7 @@ public class PropagandaModel implements Serializable {
 
     private String descricao;
 
-    private Date img;
+    private String img;
     private String publico_alvo;
     private Date data_limite;
 

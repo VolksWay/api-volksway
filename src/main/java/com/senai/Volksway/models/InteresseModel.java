@@ -23,12 +23,12 @@ public class InteresseModel implements Serializable {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "id_propaganda", referencedColumnName = "id_usuario")
-    private UUID id_propaganda;
+    @JoinColumn(name = "id_propaganda", referencedColumnName = "id_propaganda")
+    private PropagandaModel propaganda;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
-    private UUID id_usuario;
+    private UsuarioModel usuario;
 
     private boolean meio_contato_email;
 }

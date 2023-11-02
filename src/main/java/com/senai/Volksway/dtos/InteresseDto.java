@@ -1,5 +1,7 @@
 package com.senai.Volksway.dtos;
 
+import com.senai.Volksway.models.PropagandaModel;
+import com.senai.Volksway.models.UsuarioModel;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;

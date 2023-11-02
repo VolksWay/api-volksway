@@ -45,6 +45,7 @@ public class UsuarioController {
         UsuarioModel novoUsuario = new UsuarioModel();
         BeanUtils.copyProperties(usuarioDto, novoUsuario);
 
+
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(novoUsuario));
     }
 

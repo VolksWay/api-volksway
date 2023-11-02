@@ -1,5 +1,6 @@
 package com.senai.Volksway.dtos;
 
+import com.senai.Volksway.models.EmpresaModel;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
