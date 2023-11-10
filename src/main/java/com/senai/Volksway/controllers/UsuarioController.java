@@ -3,10 +3,14 @@ package com.senai.Volksway.controllers;
 import com.senai.Volksway.dtos.UsuarioDto;
 import com.senai.Volksway.models.UsuarioModel;
 import com.senai.Volksway.repositories.UsuarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +41,11 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @Operation(summary = "Método para cadastrar um Usuário", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cadastro foi efetuado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Paramatros inválidos")
+    })
     public ResponseEntity<Object> criarUsuario(@RequestBody @Valid UsuarioDto usuarioDto){
         if (usuarioRepository.findByEmail(usuarioDto.email()) != null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");

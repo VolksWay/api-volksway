@@ -1,6 +1,6 @@
 package com.senai.Volksway.dtos;
 
-import com.senai.Volksway.models.EmpresaModel;
+import com.senai.Volksway.models.TipoModel;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -21,7 +21,7 @@ public record UsuarioDto(
         @NotBlank String cidade,
         @NotBlank String cpf,
 
-        @NotBlank int tipo_usuario) {
+        TipoModel tipo_usuario) {
 
 }
 
