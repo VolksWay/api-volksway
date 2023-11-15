@@ -22,7 +22,7 @@ public class TokenService {
         try{
             Algorithm algoritimo = Algorithm.HMAC256(secret);
             String token = JWT.create()
-                    .withIssuer("api-vsconnect")
+                    .withIssuer("api-volksway")
                     .withSubject(usuario.getEmail())
                     .withExpiresAt(gerarValidadeToken())
                     .sign(algoritimo);
@@ -37,7 +37,7 @@ public class TokenService {
         try{
             Algorithm algoritimo = Algorithm.HMAC256(secret);
             return JWT.require(algoritimo)
-                    .withIssuer("api-vsconnect")
+                    .withIssuer("api-volksway")
                     .build()
                     .verify(token)
                     .getSubject();

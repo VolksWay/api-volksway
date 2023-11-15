@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.io.Serial;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -37,33 +38,33 @@ public class UsuarioModel implements Serializable, UserDetails {
     private String email;
     @JsonIgnore
     private String senha;
-    private Date data_nascimento;
+    private LocalDate data_nascimento;
     private String cidade;
     private String cpf;
     private TipoModel tipo_usuario;
+    private String img;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (TipoModel.ADMIN.equals(this.tipo_usuario)) {
+        if (this.tipo_usuario == TipoModel.ADMIN) {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_ADM_FROTA"),
                     new SimpleGrantedAuthority("ROLE_MOTORISTA"),
-                    new SimpleGrantedAuthority("ROLE_PROPRIETARIO")
+                    new SimpleGrantedAuthority("ROLE_PROPRIETARIO"),
+                    new SimpleGrantedAuthority("ROLE_ADMFROTA")
             );
-        }
-        if (TipoModel.ADM_FROTA.equals(this.tipo_usuario)) {
-            return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADM_FROTA")
-            );
-        }
-        if (TipoModel.MOTORISTA.equals(this.tipo_usuario)) {
+        }else if (this.tipo_usuario == TipoModel.MOTORISTA) {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_MOTORISTA")
             );
-        } else if (TipoModel.PROPRIETARIO.equals(this.tipo_usuario)) {
+
+        }else if (this.tipo_usuario == TipoModel.PROPRIETARIO) {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_PROPRIETARIO")
+            );
+        }else if (this.tipo_usuario == TipoModel.ADM_FROTA) {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMFROTA")
             );
         }
         return null;

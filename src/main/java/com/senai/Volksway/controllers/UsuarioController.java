@@ -2,7 +2,9 @@ package com.senai.Volksway.controllers;
 
 import com.senai.Volksway.dtos.UsuarioDto;
 import com.senai.Volksway.models.UsuarioModel;
+import com.senai.Volksway.repositories.EmpresaRepository;
 import com.senai.Volksway.repositories.UsuarioRepository;
+import com.senai.Volksway.services.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,8 +25,12 @@ import java.util.UUID;
 @RestController //Annotation para definir controller
 @RequestMapping(value = "/usuarios", produces = {"application/json"})
 public class UsuarioController {
-    @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)
+    @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    EmpresaRepository empresaRepository;
+    @Autowired
+    FileUploadService fileUploadServices;
 
     @GetMapping
     public ResponseEntity<List<UsuarioModel>> listarUsuarios() {
@@ -40,22 +48,39 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioBuscado.get());
     }
 
-    @PostMapping
-    @Operation(summary = "Método para cadastrar um Usuário", method = "POST")
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Método para cadastrar um usuario", method ="POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cadastro foi efetuado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Paramatros inválidos")
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
     })
-    public ResponseEntity<Object> criarUsuario(@RequestBody @Valid UsuarioDto usuarioDto){
-        if (usuarioRepository.findByEmail(usuarioDto.email()) != null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email já cadastrado");
+    public ResponseEntity<Object> criarUsuario(@ModelAttribute @Valid UsuarioDto usuarioDto){
+        UsuarioModel usuarioModel = new UsuarioModel();
+
+        BeanUtils.copyProperties(usuarioDto, usuarioModel);
+
+        var empresa = empresaRepository.findById(usuarioDto.id_empresa());
+
+        if (empresa.isPresent()) {
+            usuarioModel.setEmpresa(empresa.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id da empresa não encontrado");
         }
 
-        UsuarioModel novoUsuario = new UsuarioModel();
-        BeanUtils.copyProperties(usuarioDto, novoUsuario);
+        String urlImagem;
 
+        try{
+            urlImagem = fileUploadServices.fazerUpload(usuarioDto.img());
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(novoUsuario));
+        usuarioModel.setImg(urlImagem);
+
+        String senhaCript = new BCryptPasswordEncoder().encode(usuarioDto.senha());
+        usuarioModel.setSenha(senhaCript);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuarioModel));
     }
 
     @PutMapping("/{idUsuario}") //PathVariable = Pega o valor passado da url, RequestBody: Pega os valores do Body
@@ -72,6 +97,23 @@ public class UsuarioController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usuarioRepository.save(usuarioDb));
     };
+
+    @PatchMapping("/{idUsuario}")
+    public ResponseEntity<Object> atualizarEmailUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody UsuarioDto usuarioDto) {
+        Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
+
+        if (usuarioBuscado.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+
+        UsuarioModel usuarioDb = usuarioBuscado.get();
+
+        if (usuarioDto.email() != null && !usuarioDto.email().isEmpty()) {
+            usuarioDb.setEmail(usuarioDto.email());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usuarioRepository.save(usuarioDb));
+    }
 
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "idUsuario") UUID id){

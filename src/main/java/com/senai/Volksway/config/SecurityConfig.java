@@ -25,8 +25,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/checklists").permitAll()
+                        .requestMatchers("/empresas").permitAll()
+                        .requestMatchers("/interesses").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/propagandas").permitAll()
                         .requestMatchers("/usuarios").permitAll()
+                        .requestMatchers("/veiculos").permitAll()
                         .anyRequest().permitAll()
                 ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

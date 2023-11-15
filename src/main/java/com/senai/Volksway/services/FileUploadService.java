@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class FileUploadService {
     private final Path diretorioImg = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\static\\img");
-
     public String fazerUpload(MultipartFile imagem) throws IOException {
         if (imagem.isEmpty()){
             System.out.println("imagem vazia");
@@ -23,9 +22,7 @@ public class FileUploadService {
         }
 
         //nomeArquivo.png
-        //nome
-        //png
-        //nome.Arquivo.jpg
+        //nome.Arquivo.png
         String[] nomeArquivoArray = imagem.getOriginalFilename().split("\\.");
         String novoNome = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMyyyyHHmmss"));
         String extensaoArquivo = nomeArquivoArray[nomeArquivoArray.length - 1];
