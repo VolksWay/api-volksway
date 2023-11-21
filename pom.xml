@@ -11,7 +11,6 @@
 	<groupId>com.senai</groupId>
 	<artifactId>Volksway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
 	<name>Volksway</name>
 	<description>API para o Volksway</description>
 	<properties>
