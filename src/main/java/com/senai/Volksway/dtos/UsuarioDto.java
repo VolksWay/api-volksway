@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.UUID;
 
 public record UsuarioDto(
-        UUID id_empresa,
         @NotBlank String nome,
 
         @NotBlank @Email(message = "O email deve estar no formato válido") String email,
@@ -19,9 +18,12 @@ public record UsuarioDto(
 
         @NotBlank String telefone,
 
-        @NotBlank LocalDate data_nascimento,
+        LocalDate data_nascimento,
         @NotBlank String cidade,
         @NotBlank String cpf,
+        @NotBlank String cnpj_empresa,
+        @NotBlank String razao_social,
+        @NotBlank String cidade_empresa,
 
         TipoModel tipo_usuario,
         MultipartFile img) {
