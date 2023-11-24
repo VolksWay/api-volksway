@@ -22,7 +22,7 @@ public record PropagandaDto(
 
          float preco,
          boolean importancia,
-        @NotBlank String nomeTipoPropaganda,
+        @NotBlank String nome_tipo_propaganda,
 
         MultipartFile img) {
 
