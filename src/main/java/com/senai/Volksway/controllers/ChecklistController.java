@@ -45,7 +45,7 @@ public class ChecklistController {
         String urlImagem;
 
         try{
-            urlImagem = fileUploadService.fazerUpload(checklistDto.imagem());
+            urlImagem = fileUploadService.fazerUpload(checklistDto.foto_pneu());
         }catch (IOException e){
             throw new RuntimeException(e);
         }

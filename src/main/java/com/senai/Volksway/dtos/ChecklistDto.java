@@ -13,6 +13,6 @@ public record ChecklistDto(
         @NotBlank boolean combustivel,
         @NotBlank boolean oleo,
         @NotBlank boolean ar_condicionado,
-        MultipartFile imagem) {
+        MultipartFile foto_pneu) {
 
 }

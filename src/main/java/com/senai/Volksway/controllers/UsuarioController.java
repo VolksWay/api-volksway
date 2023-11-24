@@ -101,22 +101,30 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuarioModel));
     }
 
-    @PutMapping("/{idUsuario}") //PathVariable = Pega o valor passado da url, RequestBody: Pega os valores do Body
-    public ResponseEntity<Object> alterarUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody @Valid UsuarioDto usuarioDto) {
-        Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id); //Procura o usuario atraves do id, caso nao existe ele nao prossegue
+    @PutMapping(value = "/{idUsuario}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Object> editarUsuario(@PathVariable(value = "idUsuario") UUID id, @ModelAttribute @Valid UsuarioDto usuarioDto){
+
+        Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
 
         if (usuarioBuscado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
         }
 
-        UsuarioModel usuarioDb = usuarioBuscado.get();
+        UsuarioModel usuarioBd = usuarioBuscado.get();
+        BeanUtils.copyProperties(usuarioDto, usuarioBd);
 
-        BeanUtils.copyProperties(usuarioDto, usuarioDb); // as informações do dto são puxadas pela url e passadas para o usuario do database
+        String urlImagem;
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usuarioRepository.save(usuarioDb));
-    }
+        try{
+            urlImagem = fileUploadServices.fazerUpload(usuarioDto.img());
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
 
-    ;
+        usuarioBd.setImg(urlImagem);
+
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(usuarioBd));
+    };
 
     @PatchMapping("/{idUsuario}")
     public ResponseEntity<Object> atualizarEmailUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody UsuarioDto usuarioDto) {
