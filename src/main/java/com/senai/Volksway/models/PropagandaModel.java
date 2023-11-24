@@ -38,5 +38,5 @@ public class PropagandaModel implements Serializable {
 
     private float preco;
     private boolean importancia;
-    private String nomeTipoPropaganda;
+    private String nome_tipo_propaganda;
 }
