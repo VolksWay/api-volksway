@@ -3,6 +3,7 @@ package com.senai.Volksway.controllers;
 import com.senai.Volksway.dtos.PropagandaDto;
 import com.senai.Volksway.models.PropagandaModel;
 import com.senai.Volksway.repositories.PropagandaRepository;
+import com.senai.Volksway.repositories.UsuarioRepository;
 import com.senai.Volksway.services.FileUploadService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +25,9 @@ public class PropagandaController {
     PropagandaRepository propagandaRepository;
 
     @Autowired
+    UsuarioRepository usuarioRepository;
+
+    @Autowired
     FileUploadService fileUploadService;
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -40,6 +44,16 @@ public class PropagandaController {
         }
 
         novaPropaganda.setImg(urlImagem);
+
+        var usuario = usuarioRepository.findById(propagandaDto.id_usuario());
+
+        //se existir id da usuario
+        if (usuario.isPresent()) {
+            novaPropaganda.setUsuario(usuario.get());
+        } else {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario nao encontrado");
+        }
+
 
         return ResponseEntity.status(HttpStatus.CREATED).body(propagandaRepository.save(novaPropaganda));
     }
@@ -61,7 +75,7 @@ public class PropagandaController {
     }
 
     @PutMapping(value = "/{idPropaganda}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Object> editarPropaganda(@PathVariable(value = "idPropaganda") UUID id, @ModelAttribute @Valid PropagandaDto propagandaDto){
+    public ResponseEntity<Object> editarPropaganda(@PathVariable(value = "idPropaganda") UUID id, @ModelAttribute  @Valid PropagandaDto propagandaDto){
 
         Optional<PropagandaModel> propagandaBuscada = propagandaRepository.findById(id);
 
