@@ -1,6 +1,8 @@
 package com.senai.Volksway.controllers;
 
+import com.senai.Volksway.dtos.EmpresaDto;
 import com.senai.Volksway.dtos.UsuarioDto;
+import com.senai.Volksway.models.EmpresaModel;
 import com.senai.Volksway.models.UsuarioModel;
 import com.senai.Volksway.repositories.EmpresaRepository;
 import com.senai.Volksway.repositories.UsuarioRepository;
@@ -16,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.senai.Volksway.controllers.EmpresaController;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,10 +38,12 @@ public class UsuarioController {
     @GetMapping
     public ResponseEntity<List<UsuarioModel>> listarUsuarios() {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.findAll());
-    };
+    }
+
+    ;
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<Object> buscarUsuario(@PathVariable(value = "idUsuario") UUID id){
+    public ResponseEntity<Object> buscarUsuario(@PathVariable(value = "idUsuario") UUID id) {
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
 
         if (usuarioBuscado.isEmpty()) {
@@ -49,29 +54,42 @@ public class UsuarioController {
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @Operation(summary = "Método para cadastrar um usuario", method ="POST")
+    @Operation(summary = "Método para cadastrar um usuario", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cadastro foi efetuado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
     })
-    public ResponseEntity<Object> criarUsuario(@ModelAttribute @Valid UsuarioDto usuarioDto){
+    public ResponseEntity<Object> criarUsuario(@ModelAttribute @Valid UsuarioDto usuarioDto) {
         UsuarioModel usuarioModel = new UsuarioModel();
 
+        // Copie as propriedades do UsuarioDto para UsuarioModel
         BeanUtils.copyProperties(usuarioDto, usuarioModel);
 
-        var empresa = empresaRepository.findById(usuarioDto.id_empresa());
+        // Busque a empresa pelo CNPJ
+        EmpresaModel empresa = empresaRepository.findByCnpj(usuarioDto.cnpj_empresa());
 
-        if (empresa.isPresent()) {
-            usuarioModel.setEmpresa(empresa.get());
+        if (empresa != null) {
+            usuarioModel.setEmpresa(empresa);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id da empresa não encontrado");
+            // Se a empresa não for encontrada, crie uma nova usando o DTO
+            EmpresaDto empresaDto = new EmpresaDto(
+                    usuarioDto.razao_social(),
+                    usuarioDto.cidade_empresa(),
+                    usuarioDto.cnpj_empresa()
+            );
+
+            EmpresaModel novaEmpresa = new EmpresaModel();
+            BeanUtils.copyProperties(empresaDto, novaEmpresa);
+            empresaRepository.save(novaEmpresa);
+
+            usuarioModel.setEmpresa(novaEmpresa);
         }
 
         String urlImagem;
 
-        try{
+        try {
             urlImagem = fileUploadServices.fazerUpload(usuarioDto.img());
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -84,7 +102,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{idUsuario}") //PathVariable = Pega o valor passado da url, RequestBody: Pega os valores do Body
-    public ResponseEntity<Object> alterarUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody @Valid UsuarioDto usuarioDto){
+    public ResponseEntity<Object> alterarUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody @Valid UsuarioDto usuarioDto) {
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id); //Procura o usuario atraves do id, caso nao existe ele nao prossegue
 
         if (usuarioBuscado.isEmpty()) {
@@ -96,7 +114,9 @@ public class UsuarioController {
         BeanUtils.copyProperties(usuarioDto, usuarioDb); // as informações do dto são puxadas pela url e passadas para o usuario do database
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usuarioRepository.save(usuarioDb));
-    };
+    }
+
+    ;
 
     @PatchMapping("/{idUsuario}")
     public ResponseEntity<Object> atualizarEmailUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody UsuarioDto usuarioDto) {
@@ -116,7 +136,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{idUsuario}")
-    public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "idUsuario") UUID id){
+    public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "idUsuario") UUID id) {
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
 
         if (usuarioBuscado.isEmpty()) {
@@ -126,5 +146,7 @@ public class UsuarioController {
         usuarioRepository.delete(usuarioBuscado.get()); //deletar o usuario buscasdo
 
         return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado com sucesso!");
-    };
+    }
+
+    ;
 }
