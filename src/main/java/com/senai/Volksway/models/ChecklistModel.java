@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.io.Serial;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -30,5 +31,6 @@ public class ChecklistModel implements Serializable {
     private boolean combustivel;
     private boolean oleo;
     private boolean ar_condicionado;
+    private LocalDate data_criado;
     private String foto_pneu;
 }

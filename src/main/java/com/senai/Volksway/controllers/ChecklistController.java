@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,6 +53,8 @@ public class ChecklistController {
         }
 
         novoChecklist.setFoto_pneu(urlImagem);
+        LocalDate hoje = LocalDate.now( ZoneId.of( "America/Sao_Paulo" ) ) ;
+        novoChecklist.setData_criado(hoje);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(checklistRepository.save(novoChecklist));
     }
