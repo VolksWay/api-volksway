@@ -4,6 +4,7 @@ import com.senai.Volksway.dtos.InteresseDto;
 import com.senai.Volksway.models.InteresseModel;
 import com.senai.Volksway.repositories.InteresseRepository;
 import com.senai.Volksway.repositories.PropagandaRepository;
+import com.senai.Volksway.repositories.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,13 @@ import java.util.UUID;
 @RestController //Annotation para definir controller
 @RequestMapping(value = "/interesses", produces = {"application/json"})
 public class InteresseController {
-    @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)
-    InteresseRepository interesseRepository;
     @Autowired
-    private PropagandaRepository propagandaRepository;
+    InteresseRepository interesseRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
+    @Autowired
+    PropagandaRepository propagandaRepository;
 
     @GetMapping("/{idInteresse}")
     public ResponseEntity<Object> buscarInteresse(@PathVariable(value = "idInteresse") UUID id){
@@ -45,7 +49,6 @@ public class InteresseController {
         BeanUtils.copyProperties(interesseDto, novoInteresse);
 
         var propaganda = propagandaRepository.findById(interesseDto.id_propaganda());
-        var usuario = propagandaRepository.findById(interesseDto.id_usuario());
 
         if (propaganda.isPresent()) {
             novoInteresse.setPropaganda(propaganda.get());
@@ -53,8 +56,10 @@ public class InteresseController {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id propaganda não encontrado");
         }
 
+        var usuario = usuarioRepository.findById(interesseDto.id_usuario());
+
         if (usuario.isPresent()) {
-            novoInteresse.setPropaganda(usuario.get());
+            novoInteresse.setUsuario(usuario.get());
         } else {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id usuario não encontrado");
         }

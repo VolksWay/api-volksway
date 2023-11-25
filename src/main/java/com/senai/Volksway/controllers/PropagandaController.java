@@ -108,6 +108,6 @@ public class PropagandaController {
         }
 
         propagandaRepository.delete(propagandaBuscada.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Propaganda deletado com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body("Propaganda deletada com sucesso!");
     }
 }

@@ -18,10 +18,10 @@ public record PropagandaDto(
         @NotBlank String descricao,
         @NotBlank String publico_alvo,
 
-       @DateTimeFormat(pattern = "yyyy-MM-dd") Date data_limite,
+        @DateTimeFormat(pattern = "yyyy-MM-dd") Date data_limite,
 
-         float preco,
-         boolean importancia,
+        float preco,
+        boolean importancia,
         @NotBlank String nome_tipo_propaganda,
 
         MultipartFile img) {
