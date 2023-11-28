@@ -5,9 +5,11 @@ import com.senai.Volksway.dtos.UsuarioDto;
 import com.senai.Volksway.models.EmpresaModel;
 import com.senai.Volksway.models.InteresseModel;
 import com.senai.Volksway.models.UsuarioModel;
+import com.senai.Volksway.models.VeiculoModel;
 import com.senai.Volksway.repositories.EmpresaRepository;
 import com.senai.Volksway.repositories.InteresseRepository;
 import com.senai.Volksway.repositories.UsuarioRepository;
+import com.senai.Volksway.repositories.VeiculoRepository;
 import com.senai.Volksway.services.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,6 +39,9 @@ public class UsuarioController {
 
     @Autowired
     InteresseRepository interesseRepository;
+
+    @Autowired
+    VeiculoRepository veiculoRepository;
     @Autowired
     FileUploadService fileUploadServices;
 
@@ -76,6 +81,28 @@ public class UsuarioController {
 
         // Retornar a lista de interesses encontrados
         return ResponseEntity.status(HttpStatus.OK).body(interessesDoUsuario);
+    }
+
+    @GetMapping("/{idUsuario}/veiculos")
+    public ResponseEntity<Object> listarVeiculosPorUsuario(@PathVariable(value = "idUsuario") UUID id) {
+        // Procurar o usuário pelo ID
+        Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
+
+        // Verificar se o usuário foi encontrado
+        if (usuarioBuscado.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
+
+        List<VeiculoModel> veiculosDoUsuario = veiculoRepository.findByUsuario(usuarioBuscado.get());
+
+
+        // Verificar se o usuário possui veiculos
+        if (veiculosDoUsuario.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não possui veiculo");
+        }
+
+        // Retornar a lista de veiculos encontrados
+        return ResponseEntity.status(HttpStatus.OK).body(veiculosDoUsuario);
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
