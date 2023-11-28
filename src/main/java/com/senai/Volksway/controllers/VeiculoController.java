@@ -2,6 +2,8 @@ package com.senai.Volksway.controllers;
 
 import com.senai.Volksway.dtos.VeiculoDto;
 import com.senai.Volksway.models.VeiculoModel;
+import com.senai.Volksway.models.UsuarioModel;
+import com.senai.Volksway.repositories.UsuarioRepository;
 import com.senai.Volksway.repositories.VeiculoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +21,9 @@ import java.util.UUID;
 public class VeiculoController {
     @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)
     VeiculoRepository veiculoRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     @GetMapping("/{idVeiculo}")
     public ResponseEntity<Object> buscarVeiculo(@PathVariable(value = "idVeiculo") UUID id){
@@ -40,6 +45,14 @@ public class VeiculoController {
     public ResponseEntity<Object> criarVeiculo(@RequestBody @Valid VeiculoDto veiculoDto){
         VeiculoModel novoVeiculo = new VeiculoModel();
         BeanUtils.copyProperties(veiculoDto, novoVeiculo);
+
+        var usuario = usuarioRepository.findById(veiculoDto.id_usuario());
+
+        if (usuario.isPresent()) {
+            novoVeiculo.setUsuario(usuario.get());
+        } else {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id usuário não encontrado");
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(veiculoRepository.save(novoVeiculo));
     }

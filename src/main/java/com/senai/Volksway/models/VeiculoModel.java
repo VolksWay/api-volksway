@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.io.Serial;
-import java.util.Date;
 import java.util.UUID;
 
 @Getter

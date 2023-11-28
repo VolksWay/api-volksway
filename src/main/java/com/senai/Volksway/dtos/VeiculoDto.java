@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.UUID;
 
 public record VeiculoDto(
-        @NotBlank UUID id_usuario,
+        UUID id_usuario,
         @NotBlank String marca,
 
         @NotBlank String placa,
