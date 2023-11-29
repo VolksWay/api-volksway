@@ -86,7 +86,7 @@ public class UsuarioController {
         // Procurar o usuário pelo ID
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
 
-        // Verificar se o usuário foi encontrado
+        // Verificar se o usuário foi encontrado na lista
         if (usuarioBuscado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
@@ -94,7 +94,7 @@ public class UsuarioController {
         List<VeiculoModel> veiculosDoUsuario = veiculoRepository.findByUsuario(usuarioBuscado.get());
 
 
-        // Verificar se o usuário possui veiculos
+        // Verificar se o usuário possui veiculos foi encontrado em lista
         if (veiculosDoUsuario.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não possui veiculo");
         }
