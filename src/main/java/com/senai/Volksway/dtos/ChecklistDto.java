@@ -14,6 +14,7 @@ public record ChecklistDto(
         boolean combustivel,
         boolean oleo,
         boolean ar_condicionado,
+        @NotBlank String estado_pneu,
         MultipartFile foto_pneu) {
 
 }

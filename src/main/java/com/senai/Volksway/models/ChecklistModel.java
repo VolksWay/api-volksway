@@ -33,4 +33,5 @@ public class ChecklistModel implements Serializable {
     private boolean ar_condicionado;
     private LocalDate data_criado;
     private String foto_pneu;
+    private String estado_pneu;
 }
