@@ -34,9 +34,13 @@ public class SecurityConfig {
                         .requestMatchers("/propagandas").authenticated()
                         .requestMatchers("/propagandas/*").authenticated()
                         .requestMatchers("/usuarios").authenticated()
-                        .requestMatchers("/usuarios/*").authenticated()
+                        .requestMatchers("/usuarios/*").permitAll()
                         .requestMatchers("/veiculos").authenticated()
                         .requestMatchers("/veiculos/*").authenticated()
+                        .requestMatchers("/swagger-ui/*").permitAll()
+                        .requestMatchers("/swagger-ui/**",
+                                "/swagger-resources/*",
+                                "/v3/api-docs/**").permitAll()
                 ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
