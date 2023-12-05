@@ -31,6 +31,7 @@ public class ChecklistController {
     @Autowired
     private VeiculoRepository veiculoRepository;
 
+    @CrossOrigin
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> criarChecklist(@ModelAttribute @Valid ChecklistDto checklistDto){
         ChecklistModel novoChecklist = new ChecklistModel();
@@ -59,11 +60,13 @@ public class ChecklistController {
         return ResponseEntity.status(HttpStatus.CREATED).body(checklistRepository.save(novoChecklist));
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<ChecklistModel>> listarChecklists() {
         return ResponseEntity.status(HttpStatus.OK).body(checklistRepository.findAll());
     }
 
+    @CrossOrigin
     @GetMapping("/{idChecklist}")
     public ResponseEntity<Object> buscarChecklist(@PathVariable(value = "idChecklist") UUID id){
         Optional<ChecklistModel> checklistBuscado = checklistRepository.findById(id);

@@ -20,6 +20,7 @@ public class EmpresaController {
     @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)
     EmpresaRepository empresaRepository;
 
+    @CrossOrigin
     @GetMapping("/{idEmpresa}")
     public ResponseEntity<Object> buscarEmpresa(@PathVariable(value = "idEmpresa") UUID id){
         Optional<EmpresaModel> empresaBuscada = empresaRepository.findById(id);
@@ -31,11 +32,13 @@ public class EmpresaController {
         return ResponseEntity.status(HttpStatus.OK).body(empresaBuscada.get());
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<EmpresaModel>> listarEmpresas() {
         return ResponseEntity.status(HttpStatus.OK).body(empresaRepository.findAll());
     };
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Object> criarEmpresa(@RequestBody @Valid EmpresaDto empresaDto){
         EmpresaModel novaEmpresa = new EmpresaModel();

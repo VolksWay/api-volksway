@@ -50,6 +50,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.findAll());
     }
 
+    @CrossOrigin
     @GetMapping("/{idUsuario}")
     public ResponseEntity<Object> buscarUsuario(@PathVariable(value = "idUsuario") UUID id) {
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
@@ -60,6 +61,8 @@ public class UsuarioController {
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioBuscado.get());
     }
+
+    @CrossOrigin
     @GetMapping("/{idUsuario}/interesses")
     public ResponseEntity<Object> listarInteressesPorUsuario(@PathVariable(value = "idUsuario") UUID id) {
         // Procurar o usuário pelo ID
@@ -81,6 +84,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(interessesDoUsuario);
     }
 
+    @CrossOrigin
     @GetMapping("/{idUsuario}/veiculos")
     public ResponseEntity<Object> listarVeiculosPorUsuario(@PathVariable(value = "idUsuario") UUID id) {
         // Procurar o usuário pelo ID
@@ -103,6 +107,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(veiculosDoUsuario);
     };
 
+    @CrossOrigin
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Método para cadastrar um usuario", method = "POST")
     @ApiResponses(value = {
@@ -148,6 +153,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuarioModel));
     };
 
+    @CrossOrigin
     @PutMapping(value = "/{idUsuario}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> editarUsuario(@PathVariable(value = "idUsuario") UUID id, @ModelAttribute @Valid UsuarioDto usuarioDto){
 
@@ -173,6 +179,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(usuarioBd));
     };
 
+    @CrossOrigin
     @PatchMapping("/{idUsuario}")
     public ResponseEntity<Object> atualizarEmailUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody UsuarioDto usuarioDto) {
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
@@ -190,6 +197,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usuarioRepository.save(usuarioDb));
     };
 
+    @CrossOrigin
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "idUsuario") UUID id) {
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
