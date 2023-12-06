@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/propagandas").authenticated()
                         .requestMatchers("/propagandas/*").authenticated()
-                        .requestMatchers("/usuarios").authenticated()
+                        .requestMatchers("/usuarios").permitAll()
                         .requestMatchers("/usuarios/*").permitAll()
                         .requestMatchers("/veiculos").authenticated()
                         .requestMatchers("/veiculos/*").authenticated()

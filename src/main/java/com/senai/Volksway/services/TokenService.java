@@ -23,7 +23,8 @@ public class TokenService {
             Algorithm algoritimo = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("api-volksway")
-                    .withSubject(usuario.getEmail())
+                    .withSubject(String.valueOf(usuario.getId()))
+                    .withClaim("tipoUsuario", String.valueOf(usuario.getTipo_usuario()))
                     .withExpiresAt(gerarValidadeToken())
                     .sign(algoritimo);
             return token;
