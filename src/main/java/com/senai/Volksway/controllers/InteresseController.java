@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController //Annotation para definir controller
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(value = "/interesses", produces = {"application/json"})
 public class InteresseController {
     @Autowired
@@ -26,7 +27,6 @@ public class InteresseController {
     UsuarioRepository usuarioRepository;
     @Autowired
     PropagandaRepository propagandaRepository;
-    @CrossOrigin
 
     @GetMapping("/{idInteresse}")
     public ResponseEntity<Object> buscarInteresse(@PathVariable(value = "idInteresse") UUID id){
@@ -39,13 +39,11 @@ public class InteresseController {
         return ResponseEntity.status(HttpStatus.OK).body(interesseBuscado.get());
     }
 
-    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<InteresseModel>> listarInteresses() {
         return ResponseEntity.status(HttpStatus.OK).body(interesseRepository.findAll());
     };
 
-    @CrossOrigin
     @PostMapping
     public ResponseEntity<Object> criarInteresse(@RequestBody @Valid InteresseDto interesseDto){
         InteresseModel novoInteresse = new InteresseModel();

@@ -3,6 +3,7 @@ package com.senai.Volksway.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,8 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/interesses").authenticated()
                         .requestMatchers("/interesses/*").authenticated()
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/propagandas").authenticated()
-                        .requestMatchers("/propagandas/*").authenticated()
+                        .requestMatchers("/propagandas").permitAll()
+                        .requestMatchers("/propagandas/*").permitAll()
                         .requestMatchers("/usuarios").permitAll()
                         .requestMatchers("/usuarios/*").permitAll()
                         .requestMatchers("/veiculos").authenticated()

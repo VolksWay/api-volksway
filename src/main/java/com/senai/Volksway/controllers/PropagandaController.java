@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController //Annotation para definir controller
+@CrossOrigin()
 @RequestMapping(value = "/propagandas", produces = {"application/json"})
 public class PropagandaController {
     @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)
@@ -30,7 +31,6 @@ public class PropagandaController {
     @Autowired
     FileUploadService fileUploadService;
 
-    @CrossOrigin
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> criarPropaganda(@ModelAttribute @Valid PropagandaDto propagandaDto){
         PropagandaModel novaPropaganda = new PropagandaModel();
@@ -59,13 +59,11 @@ public class PropagandaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(propagandaRepository.save(novaPropaganda));
     }
 
-    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<PropagandaModel>> listarPropagandas() {
         return ResponseEntity.status(HttpStatus.OK).body(propagandaRepository.findAll());
     }
 
-    @CrossOrigin
     @GetMapping("/{idPropaganda}")
     public ResponseEntity<Object> buscarPropaganda(@PathVariable(value = "idPropaganda") UUID id){
         Optional<PropagandaModel> propagandaBuscada = propagandaRepository.findById(id);
@@ -77,7 +75,6 @@ public class PropagandaController {
         return ResponseEntity.status(HttpStatus.OK).body(propagandaBuscada.get());
     }
 
-    @CrossOrigin
     @PutMapping(value = "/{idPropaganda}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> editarPropaganda(@PathVariable(value = "idPropaganda") UUID id, @ModelAttribute  @Valid PropagandaDto propagandaDto){
 
@@ -103,7 +100,6 @@ public class PropagandaController {
         return ResponseEntity.status(HttpStatus.OK).body(propagandaRepository.save(propagandaBd));
     }
 
-    @CrossOrigin
     @DeleteMapping("/{idPropaganda}")
     public ResponseEntity<Object> deletarPropaganda(@PathVariable(value = "idPropaganda") UUID id){
         Optional<PropagandaModel> propagandaBuscada = propagandaRepository.findById(id);

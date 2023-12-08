@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class LoginController {
     @Autowired private AuthenticationManager authenticationManager;
     @Autowired private TokenService tokenService;
-    @CrossOrigin
+
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid LoginDto dadosLogin){
         var userNamePassword  = new UsernamePasswordAuthenticationToken(dadosLogin.email(),dadosLogin.senha());

@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController //Annotation para definir controller
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(value = "/veiculos", produces = {"application/json"})
 public class VeiculoController {
     @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)
@@ -25,7 +26,6 @@ public class VeiculoController {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @CrossOrigin
     @GetMapping("/{idVeiculo}")
     public ResponseEntity<Object> buscarVeiculo(@PathVariable(value = "idVeiculo") UUID id){
         Optional<VeiculoModel> veiculoBuscado = veiculoRepository.findById(id);
@@ -37,13 +37,11 @@ public class VeiculoController {
         return ResponseEntity.status(HttpStatus.OK).body(veiculoBuscado.get());
     }
 
-    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<VeiculoModel>> listarVeiculo() {
         return ResponseEntity.status(HttpStatus.OK).body(veiculoRepository.findAll());
     };
 
-    @CrossOrigin
     @PostMapping
     public ResponseEntity<Object> criarVeiculo(@RequestBody @Valid VeiculoDto veiculoDto){
         VeiculoModel novoVeiculo = new VeiculoModel();

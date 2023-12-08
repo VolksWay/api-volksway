@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController //Annotation para definir controller
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(value = "/checklists", produces = {"application/json"})
 public class ChecklistController {
     @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)
@@ -31,7 +32,6 @@ public class ChecklistController {
     @Autowired
     private VeiculoRepository veiculoRepository;
 
-    @CrossOrigin
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> criarChecklist(@ModelAttribute @Valid ChecklistDto checklistDto){
         ChecklistModel novoChecklist = new ChecklistModel();
@@ -60,13 +60,11 @@ public class ChecklistController {
         return ResponseEntity.status(HttpStatus.CREATED).body(checklistRepository.save(novoChecklist));
     }
 
-    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<ChecklistModel>> listarChecklists() {
         return ResponseEntity.status(HttpStatus.OK).body(checklistRepository.findAll());
     }
 
-    @CrossOrigin
     @GetMapping("/{idChecklist}")
     public ResponseEntity<Object> buscarChecklist(@PathVariable(value = "idChecklist") UUID id){
         Optional<ChecklistModel> checklistBuscado = checklistRepository.findById(id);
