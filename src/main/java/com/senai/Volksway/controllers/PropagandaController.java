@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController //Annotation para definir controller
-@CrossOrigin()
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/propagandas", produces = {"application/json"})
 public class PropagandaController {
     @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)

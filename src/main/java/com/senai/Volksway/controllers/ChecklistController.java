@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController //Annotation para definir controller
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/checklists", produces = {"application/json"})
 public class ChecklistController {
     @Autowired //Injeção de dependência (deixar o código desacoplado, classe que utiliza funcionalidades de outras classes)

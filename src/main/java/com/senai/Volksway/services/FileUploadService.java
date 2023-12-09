@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 public class FileUploadService {
     private final Path diretorioImg = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\static\\img");
     public String fazerUpload(MultipartFile imagem) throws IOException {
-        if (imagem.isEmpty()){
+        if (imagem == null){
             System.out.println("imagem vazia");
             return null;
         }

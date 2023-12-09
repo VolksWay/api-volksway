@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController //Annotation para definir controller
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/usuarios", produces = {"application/json"})
 public class UsuarioController {
     @Autowired
@@ -103,7 +103,9 @@ public class UsuarioController {
 
         // Retornar a lista de veiculos encontrados
         return ResponseEntity.status(HttpStatus.OK).body(veiculosDoUsuario);
-    };
+    }
+
+    ;
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Método para cadastrar um usuario", method = "POST")
@@ -138,20 +140,22 @@ public class UsuarioController {
 
         try {
             urlImagem = fileUploadServices.fazerUpload(usuarioDto.img());
+            usuarioModel.setImg(urlImagem);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        usuarioModel.setImg(urlImagem);
 
         String senhaCript = new BCryptPasswordEncoder().encode(usuarioDto.senha());
         usuarioModel.setSenha(senhaCript);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuarioModel));
-    };
+    }
+
+    ;
 
     @PutMapping(value = "/{idUsuario}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Object> editarUsuario(@PathVariable(value = "idUsuario") UUID id, @ModelAttribute @Valid UsuarioDto usuarioDto){
+    public ResponseEntity<Object> editarUsuario(@PathVariable(value = "idUsuario") UUID id, @ModelAttribute @Valid UsuarioDto usuarioDto) {
 
         Optional<UsuarioModel> usuarioBuscado = usuarioRepository.findById(id);
 
@@ -164,16 +168,18 @@ public class UsuarioController {
 
         String urlImagem;
 
-        try{
+        try {
             urlImagem = fileUploadServices.fazerUpload(usuarioDto.img());
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         usuarioBd.setImg(urlImagem);
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioRepository.save(usuarioBd));
-    };
+    }
+
+    ;
 
     @PatchMapping("/{idUsuario}")
     public ResponseEntity<Object> atualizarEmailUsuario(@PathVariable(value = "idUsuario") UUID id, @RequestBody UsuarioDto usuarioDto) {
@@ -190,7 +196,9 @@ public class UsuarioController {
         }
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usuarioRepository.save(usuarioDb));
-    };
+    }
+
+    ;
 
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "idUsuario") UUID id) {
@@ -203,5 +211,7 @@ public class UsuarioController {
         usuarioRepository.delete(usuarioBuscado.get()); //deletar o usuario buscasdo
 
         return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado com sucesso!");
-    };
+    }
+
+    ;
 }
