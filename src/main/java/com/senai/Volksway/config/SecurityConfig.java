@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/checklists").authenticated()
+                        .requestMatchers("/checklists").permitAll()
                         .requestMatchers("/checklists/*").authenticated()
                         .requestMatchers("/empresas").authenticated()
                         .requestMatchers("/interesses").authenticated()

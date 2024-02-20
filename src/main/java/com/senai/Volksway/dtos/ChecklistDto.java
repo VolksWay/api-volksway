@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record ChecklistDto(
-        UUID id_veiculo,
+        UUID id_usuario,
         boolean freio,
 
         boolean combustivel,

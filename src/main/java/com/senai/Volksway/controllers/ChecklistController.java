@@ -3,6 +3,7 @@ package com.senai.Volksway.controllers;
 import com.senai.Volksway.dtos.ChecklistDto;
 import com.senai.Volksway.models.ChecklistModel;
 import com.senai.Volksway.repositories.ChecklistRepository;
+import com.senai.Volksway.repositories.UsuarioRepository;
 import com.senai.Volksway.repositories.VeiculoRepository;
 import com.senai.Volksway.services.FileUploadService;
 import jakarta.validation.Valid;
@@ -30,19 +31,19 @@ public class ChecklistController {
     @Autowired
     FileUploadService fileUploadService;
     @Autowired
-    private VeiculoRepository veiculoRepository;
+    private UsuarioRepository usuarioRepository;
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> criarChecklist(@ModelAttribute @Valid ChecklistDto checklistDto){
         ChecklistModel novoChecklist = new ChecklistModel();
         BeanUtils.copyProperties(checklistDto, novoChecklist);
 
-        var veiculo = veiculoRepository.findById(checklistDto.id_veiculo());
+        var usuario = usuarioRepository.findById(checklistDto.id_usuario());
 
-        if (veiculo.isPresent()) {
-            novoChecklist.setVeiculo(veiculo.get());
+        if (usuario.isPresent()) {
+            novoChecklist.setUsuario(usuario.get());
         } else {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id veiculo não encontrado");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id usuario não encontrado");
         }
 
         String urlImagem;

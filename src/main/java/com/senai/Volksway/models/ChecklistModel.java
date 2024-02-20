@@ -23,8 +23,8 @@ public class ChecklistModel implements Serializable {
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "id_veiculo", referencedColumnName = "id_veiculo")
-    private VeiculoModel veiculo;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UsuarioModel usuario;
 
     private boolean freio;
 

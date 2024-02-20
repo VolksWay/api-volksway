@@ -24,7 +24,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("api-vsconnect")
                     .withClaim("tipoUsuario", String.valueOf(usuario.getTipo_usuario()))
-                    .withClaim("id", String.valueOf(usuario.getId()))
+                    .withClaim("idUsuario", String.valueOf(usuario.getId()))
                     .withSubject(String.valueOf(usuario.getId()))
                     .withSubject(usuario.getEmail())
                     .withExpiresAt(gerarValidadeToken())
